@@ -6,9 +6,7 @@ import '../styles/Navbar.css';
 function NavBar() {
   return (
     <div className="mainNavBar">
-        <Link as={ReachLink} to='/'>
             Marketplace
-        </Link>
     </div>
   );
 }

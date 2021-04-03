@@ -1,7 +1,7 @@
 import { Center } from '@chakra-ui/layout';
 import React from 'react';
 
-function CategoryCard({name}) {
+function CategoryCard({category, onClick}) {
   return (
       <Center
         bg="#A3DEF1"
@@ -15,8 +15,9 @@ function CategoryCard({name}) {
         _hover={{
             boxShadow: "0px 0px 0px"
         }}
+        onClick={onClick}
       >
-          {name}
+          {category.name}
       </Center>
   );
 }
