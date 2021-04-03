@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Slider from 'react-slick';
 import VendorCard from './VendorCard';
-import api from '../api';
 
-function Carousel() {
+function Carousel({vendors}) {
     const [settings] = useState({
         dots: true,
         infinite: false,
@@ -11,22 +10,6 @@ function Carousel() {
         slidesToShow: 4,
         slidesToScroll: 1
     });
-    const [vendors, setVendors] = useState([]);
-
-    useEffect(() => {
-        async function getVendorInfo () {
-            const response = await api.post('/query/search', {
-                query: {
-                    selector: {
-                        "@assetType": "seller"
-                    }
-                }
-            });
-            setVendors(response['data'].result);
-        }
-
-        getVendorInfo();
-    }, [])
     return (
         <Slider {...settings}>
             {vendors.length > 0 ? vendors.map((vendor) => (

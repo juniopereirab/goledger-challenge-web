@@ -10,7 +10,7 @@ function CategoryCard({name}) {
         border="1px solid #000"
         borderRadius="5px"
         margin="0 10px"
-        boxShadow="2px 2px 2px #000000"
+        boxShadow="2px 2px 2px rgba(0,0,0,.4)"
         transition="0.4s all"
         _hover={{
             boxShadow: "0px 0px 0px"
