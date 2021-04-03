@@ -1,10 +1,13 @@
 import React from 'react';
-import { Container } from '@chakra-ui/react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Routes from './routes';
 import NavBar from './components/Navbar';
 
 function App() {
   return (
-      <NavBar />
+      <Router>
+        <Routes/>
+      </Router>
   );
 }
 

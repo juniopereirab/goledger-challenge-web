@@ -11,3 +11,8 @@
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: #000;
 }
+
+.mainNavBar a {
+    text-decoration: none;
+    color: white
+}
