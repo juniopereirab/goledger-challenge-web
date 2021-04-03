@@ -5,11 +5,11 @@ import '../styles/Navbar.css';
 
 function NavBar() {
   return (
-    <navbar className="mainNavBar">
+    <div className="mainNavBar">
         <Link as={ReachLink} to='/'>
             Marketplace
         </Link>
-    </navbar>
+    </div>
   );
 }
 
