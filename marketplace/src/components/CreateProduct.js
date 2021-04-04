@@ -71,7 +71,7 @@ function CreateProduct({vendors, categories}) {
                   <FormControl isRequired>
                       <FormLabel fontFamily="Montserrat">Nome:</FormLabel>
                       <Input fontFamily="Montserrat" placeholder="Ex: Docinhos" value={name} onChange={(e) => setName(e.target.value)}/>
-                      <FormLabel fontFamily="Montserrat" marginTop="10px">Preco:</FormLabel>
+                      <FormLabel fontFamily="Montserrat" marginTop="10px">Preço:</FormLabel>
                       <InputGroup>
                         <InputLeftElement 
                           pointerEvents="none"

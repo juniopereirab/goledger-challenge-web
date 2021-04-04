@@ -1,6 +1,5 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import NavBar from '../components/Navbar';
-import api from '../services/api';
 import { Center, Grid, Text } from '@chakra-ui/layout';
 import { Fab } from 'react-tiny-fab';
 import 'react-tiny-fab/dist/styles.css';

@@ -122,7 +122,7 @@ function ProductCard({productName, productPrice, onClick, selectedProduct, vendo
                     />
                     <Input 
                         variant="flushed" 
-                        placeholder="Editar preco do produto" 
+                        placeholder="Editar preço do produto" 
                         margin="5px 0px"
                         value={newPrice}
                         onChange={(e) => setNewPrice(e.target.value)}
