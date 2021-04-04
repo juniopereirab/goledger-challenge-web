@@ -18,3 +18,12 @@ header {
     flex-direction: column;
     justify-content: space-around;
 }
+
+span#secret {
+    color: black;
+    background-color: black;
+}
+
+span#secret:hover {
+    background-color: white;
+}
