@@ -38,10 +38,10 @@ function CategoryCard({category, onClick, onDelete, isLoading, categoryName}) {
       <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
         <ModalOverlay/>
         <ModalContent>
-            <ModalHeader>Informações do Categoria</ModalHeader>
+            <ModalHeader fontFamily="Montserrat" fontWeight="bold" fontSize="3xl">Informações do Categoria</ModalHeader>
             <ModalCloseButton />
             <ModalBody d="flex" flexDirection="column">
-                <Text fontSize="2xl">Nome: {categoryName}</Text>
+                <Text fontSize="2xl" fontWeight="bold" fontFamily="Montserrat">Nome: {categoryName}</Text>
             </ModalBody>
             <ModalFooter>
                 <Button isLoading={isLoading} colorScheme="red" onClick={onDelete} rightIcon={<MdDelete/>}>

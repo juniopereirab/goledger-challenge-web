@@ -67,15 +67,15 @@ function VendorCard({vendor, onClick, vendorName, vendorAddress, vendorCNPJ, ven
       <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
         <ModalOverlay/>
         <ModalContent>
-            <ModalHeader>Informações do Vendedor</ModalHeader>
+            <ModalHeader fontFamily="Montserrat" fontWeight="bold" fontSize="2xl">Informações do vendedor</ModalHeader>
             <ModalCloseButton />
             <ModalBody d="flex" flexDirection="column">
-                <Text fontSize="3xl">{vendorName}</Text>
-                <Text>Endereço: {vendorAddress}</Text>
-                <Text margin="5px 0px 0px 0px">CNPJ: <span id="secret">{vendorCNPJ}</span></Text>
-                <Text>Se juntou em: {vendorJoined}</Text>
-                <Input variant="flushed" placeholder="Editar nome" value={newVendorName} onChange={(e) => setNewVendorName(e.target.value)} margin="2px 0"/>
-                <Input variant="flushed" placeholder="Editar endereco" value={newVendorAddress} onChange={(e) => setNewVendorAddress(e.target.value)} margin="2px 0"/>
+                <Text fontSize="3xl" fontWeight="bold" fontFamily="Montserrat">{vendorName}</Text>
+                <Text fontFamily="Montserrat" fontWeight='light'>Endereço: {vendorAddress}</Text>
+                <Text margin="5px 0px 0px 0px" fontFamily="Montserrat" fontWeight='light'>CNPJ: <span id="secret">{vendorCNPJ}</span></Text>
+                <Text fontFamily="Montserrat" fontWeight="light">Se juntou em: {vendorJoined}</Text>
+                <Input fontFamily="Montserrat" variant="flushed" placeholder="Editar nome" value={newVendorName} onChange={(e) => setNewVendorName(e.target.value)} margin="2px 0"/>
+                <Input fontFamily="Montserrat" variant="flushed" placeholder="Editar endereco" value={newVendorAddress} onChange={(e) => setNewVendorAddress(e.target.value)} margin="2px 0"/>
             </ModalBody>
             <ModalFooter>
                 <Button isLoading={loading} colorScheme="blue" onClick={() => handleEdit()} rightIcon={<FaPencilAlt/>}>

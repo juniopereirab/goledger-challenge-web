@@ -1,18 +1,18 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import NavBar from '../components/Navbar';
 import api from '../api';
-import { Box, Center, Grid, Text } from '@chakra-ui/layout';
-import { Fab, Action } from 'react-tiny-fab';
+import { Center, Grid, Text } from '@chakra-ui/layout';
+import { Fab } from 'react-tiny-fab';
 import 'react-tiny-fab/dist/styles.css';
-import { BsPersonPlusFill } from 'react-icons/bs';
-import { MdAddShoppingCart } from 'react-icons/md';
-import { FaFilter } from 'react-icons/fa';
 import { TiPlus } from 'react-icons/ti';
 import Slider from 'react-slick';
 import VendorCard from '../components/VendorCard';
 import CategoryCard from '../components/CategoryCard';
 import ProductCard from '../components/ProductCard';
 
+import CreateProduct from '../components/CreateProduct';
+import CreateVendor from '../components/CreateVendor';
+import CreateCategory from '../components/CreateCategory';
 
 function Homepage() {
     const productData = {
@@ -192,27 +192,9 @@ function Homepage() {
             icon={<TiPlus/>}
             alwaysShowTitle={true}
         >
-            <Action
-                text="Adicionar produto"
-                onClick={() => console.log("Adicionar produto")}
-                style={{background:"#B3A8F4"}}
-            >
-                <MdAddShoppingCart/>
-            </Action>
-            <Action
-                text="Adicionar vendedor"
-                onClick={() => console.log("Adicionar vendedor")}
-                style={{background:"#B3A8F4"}}
-            >
-                <BsPersonPlusFill/>
-            </Action>
-            <Action
-                text="Adicionar categoria"
-                onClick={() => console.log("Adicionar categoria")}
-                style={{background:"#B3A8F4"}}
-            >
-                <FaFilter/>
-            </Action>
+            <CreateProduct text="Adicionar produto"/>
+            <CreateVendor text="Adicionar vendedor"/>
+            <CreateCategory text="Adicionar categoria"/>
         </Fab>    
       </>   
   );

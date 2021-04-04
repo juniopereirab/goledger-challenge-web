@@ -75,7 +75,7 @@ function ProductCard({productName, productPrice, onClick, isLoading, onDelete, s
         <Modal isOpen={isOpen} onClose={onClose} isCentered={true} size="lg">
             <ModalOverlay/>
             <ModalContent>
-                <ModalHeader fontFamily="Montserrat" fontWeight="bold" fontSize="3xl">Informações do Categoria</ModalHeader>
+                <ModalHeader fontFamily="Montserrat" fontWeight="bold" fontSize="3xl">Informações do Produto</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody d="flex" flexDirection="column">
                     <Text fontSize="3xl" fontFamily="Montserrat">{selectedProduct.name}</Text>
