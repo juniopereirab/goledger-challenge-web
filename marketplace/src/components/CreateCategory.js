@@ -6,7 +6,7 @@ import { Text } from '@chakra-ui/layout';
 import { Button } from '@chakra-ui/button';
 import { FaFilter } from 'react-icons/fa';
 import { Input } from '@chakra-ui/input';
-import { AiOutlinePlus } from 'react-icons/ai';
+import { AiOutlinePlusCircle } from 'react-icons/ai';
 import api from '../api';
 
 
@@ -46,7 +46,7 @@ function CreateCategory() {
                     <Input fontFamily="Montserrat" placeholder="Ex: Candy" value={name} onChange={(e) => setName(e.target.value)}/>
                 </ModalBody>
                 <ModalFooter>
-                    <Button isLoading={loading} colorScheme="blue" onClick={createCategory} rightIcon={<AiOutlinePlus/>}>
+                    <Button isLoading={loading} colorScheme="blue" onClick={createCategory} rightIcon={<AiOutlinePlusCircle/>}>
                         Criar
                     </Button>
                 </ModalFooter>
