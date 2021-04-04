@@ -103,7 +103,6 @@ function Homepage() {
                 'code': code
             }
         });
-        console.log(response.data);
         setSelectedProduct(response.data);
     }
 
@@ -182,6 +181,8 @@ function Homepage() {
                         isLoading={isLoading}
                         onDelete={() => console.log('deletou')}
                         selectedProduct={selectedProduct}
+                        vendors={vendors}
+                        categories={categories}
                     />
                 )) : null}
             </Grid>

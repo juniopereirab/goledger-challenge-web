@@ -1,15 +1,55 @@
-import React from 'react';
-import {Box, Text} from '@chakra-ui/react';
+import React, {useState} from 'react';
+import {Box, Input, Text, Select as Chelect} from '@chakra-ui/react';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Button } from '@chakra-ui/button';
 import {MdDelete } from 'react-icons/md';
+import Select from 'react-select';
+import {FaPencilAlt} from 'react-icons/fa';
+import makeAnimated from 'react-select/animated';
+import api from '../api';
 
-function ProductCard({productName, productPrice, onClick, isLoading, onDelete, selectedProduct}) {
+function ProductCard({productName, productPrice, onClick, isLoading, onDelete, selectedProduct, vendors, categories}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const handleClick = () => {
+  const animatedComponents = makeAnimated();
+  const categoriesOptions = categories.map((category) => {
+    return {value: category['@key'], label: category.name}
+  });
+  const [newName, setNewName] = useState('');
+  const [newPrice, setNewPrice] = useState('');
+  const [newSeller, setNewSeller] = useState('')
+  const [newCategories, setNewCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+
+  const handleClick = async () => {
       onClick();
       onOpen();
+  }
+
+  const handleEdit = async () => {
+      setLoading(true);
+      const name = newName !== '' ? newName : null;
+      const price = newPrice !== '' ? Number(newPrice) : null;
+      const seller = newSeller !== '' ? { '@assetType': 'seller', '@key': newSeller } : null;
+      const newerCategory = newCategories.length > 0 ? 
+      newCategories.map((category) => {
+          return { '@assetType': 'category', '@key': category.value }
+      }) : null;
+
+      await api.put('/invoke/updateAsset', {
+          "update": {
+              "@assetType": "product",
+              "code": selectedProduct.code,
+              name,
+              price,
+              categories: newerCategory,
+              soldBy: seller
+          }
+      });
+
+      setLoading(false);
+      window.location.reload();
   }
   return (
     <>
@@ -35,20 +75,51 @@ function ProductCard({productName, productPrice, onClick, isLoading, onDelete, s
         <Modal isOpen={isOpen} onClose={onClose} isCentered={true} size="lg">
             <ModalOverlay/>
             <ModalContent>
-                <ModalHeader>Informações do Categoria</ModalHeader>
+                <ModalHeader fontFamily="Montserrat" fontWeight="bold" fontSize="3xl">Informações do Categoria</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody d="flex" flexDirection="column">
-                    <Text fontSize="3xl">{selectedProduct.name}</Text>
-                    <Text>R$ {selectedProduct.price}</Text>
-                    <Text>Vendido por:</Text>
-                    <Text>{selectedProduct.soldBy.name}</Text>
-                    <Text>{selectedProduct.soldBy.address}</Text>
-                    <Text>Categorias:</Text>
-                    {selectedProduct.categories.map((category) => (
-                        <Text key={category['@key']}>{category.name}</Text>
-                    ))}
+                    <Text fontSize="3xl" fontFamily="Montserrat">{selectedProduct.name}</Text>
+                    <Text fontSize="2xl"fontFamily="Montserrat">R$ {selectedProduct.price}</Text>
+                    <Text fontWeight="bold"fontFamily="Montserrat">Vendido por:</Text>
+                    <Text fontFamily="Montserrat" fontWeight="light">{selectedProduct.soldBy.name}</Text>
+                    <Text fontFamily="Montserrat" fontWeight="light">{selectedProduct.soldBy.address}</Text>
+                    <Text fontWeight="bold" fontFamily="Montserrat">Categorias:</Text>
+                    {selectedProduct.categories ? selectedProduct.categories.map((category) => (
+                        <Text key={category['@key']} fontFamily="Montserrat" fontWeight="light">{category.name}</Text>
+                    )) : <Text fontFamily="Montserrat" fontWeight="light">Sem categorias</Text>}
+                    <Input 
+                        variant="flushed" 
+                        placeholder="Editar nome do produto" 
+                        margin="5px 0px" 
+                        value={newName} 
+                        onChange={(e) => setNewName(e.target.value)}
+                    />
+                    <Input 
+                        variant="flushed" 
+                        placeholder="Editar preco do produto" 
+                        margin="5px 0px"
+                        value={newPrice}
+                        onChange={(e) => setNewPrice(e.target.value)}
+                    />
+                    <Chelect placeholder="Editar vendedor" color="gray" onChange={(e) => setNewSeller(e.target.value)} margin="5px 0px">
+                        {vendors.map((vendor, index) => (
+                            <option key={index} value={vendor['@key']}>{vendor.name}</option>
+                        ))}
+                    </Chelect>
+                    <Select 
+                        options={categoriesOptions} 
+                        isMulti 
+                        closeMenuOnSelect={false} 
+                        components={animatedComponents} 
+                        placeholder="Selecione as categorias"
+                        onChange={(e) => setNewCategories(e)}
+                    />
+
                 </ModalBody>
                 <ModalFooter>
+                    <Button isLoading={loading} colorScheme="blue" onClick={() => handleEdit()} rightIcon={<FaPencilAlt/>}>
+                    Editar
+                    </Button>
                     <Button isLoading={isLoading} colorScheme="red" onClick={onDelete} rightIcon={<MdDelete/>}>
                         Deletar
                     </Button>

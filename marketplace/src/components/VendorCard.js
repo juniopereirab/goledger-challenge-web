@@ -24,7 +24,7 @@ function VendorCard({vendor, onClick, vendorName, vendorAddress, vendorCNPJ, ven
     const address = newVendorAddress !== '' ? newVendorAddress : null;
     setLoading(true);
 
-    const response = await api.put('/invoke/updateAsset', {
+    await api.put('/invoke/updateAsset', {
       'update': {
         '@assetType': 'seller',
         'cnpj': vendorCNPJ,
@@ -74,8 +74,8 @@ function VendorCard({vendor, onClick, vendorName, vendorAddress, vendorCNPJ, ven
                 <Text>Endereço: {vendorAddress}</Text>
                 <Text margin="5px 0px 0px 0px">CNPJ: <span id="secret">{vendorCNPJ}</span></Text>
                 <Text>Se juntou em: {vendorJoined}</Text>
-                <Input placeholder="Editar nome" value={newVendorName} onChange={(e) => setNewVendorName(e.target.value)} margin="2px 0"/>
-                <Input placeholder="Editar endereco" value={newVendorAddress} onChange={(e) => setNewVendorAddress(e.target.value)} margin="2px 0"/>
+                <Input variant="flushed" placeholder="Editar nome" value={newVendorName} onChange={(e) => setNewVendorName(e.target.value)} margin="2px 0"/>
+                <Input variant="flushed" placeholder="Editar endereco" value={newVendorAddress} onChange={(e) => setNewVendorAddress(e.target.value)} margin="2px 0"/>
             </ModalBody>
             <ModalFooter>
                 <Button isLoading={loading} colorScheme="blue" onClick={() => handleEdit()} rightIcon={<FaPencilAlt/>}>
