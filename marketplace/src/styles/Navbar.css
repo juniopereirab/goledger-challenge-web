@@ -10,6 +10,7 @@
     text-shadow: 2px 2px 10px #000;
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: #000;
+    font-family: 'Montserrat';
 }
 
 .mainNavBar a {

@@ -14,10 +14,13 @@ import CategoryCard from '../components/CategoryCard';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal';
 import { Button } from '@chakra-ui/button';
+import ProductCard from '../components/ProductCard';
+import { Alert, AlertIcon } from '@chakra-ui/alert';
 
 
 function Homepage() {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isLoading, setIsLoading] = useState(false);
     const [vendors, setVendors] = useState([]);
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
@@ -78,20 +81,17 @@ function Homepage() {
         onOpen();
     }
 
-    const deleteVendor = () => {
-        console.log(vendorCNPJ);
-        api.delete('/invoke/deleteAsset', 
-        {
+    const deleteVendor = async () => {
+        setIsLoading(true);
+        await api.delete('/invoke/deleteAsset', { 
+        data: {
             "key": {
                 '@assetType': 'seller',
                 cnpj: vendorCNPJ
-            }
-        }).then((response) => {
-            console.log(response);
-        }).catch((error) => {
-            console.log(error);
+            }}
         });
         onClose();
+        window.location.reload();
     }
 
 
@@ -99,40 +99,30 @@ function Homepage() {
       <>
         <NavBar/>
         <header>
+            <Text fontSize='4xl' fontWeight="bold" fontFamily='Montserrat' margin='15px'>Vendedores</Text>
             <Slider {...settings}>
                 {vendors.length > 0 ? vendors.map((vendor) => (
                     <VendorCard key={vendor['@key']} 
                         onClick={() => showVendorInfo(vendor)} vendor={vendor}/>
                 )) : null}
             </Slider>
+            <Text fontSize='4xl' fontWeight="bold" fontFamily='Montserrat' margin='15px'>Categorias</Text>
             <Center>
                 {categories.length > 0 ? categories.map((category) => (
                     <CategoryCard category={category} key={category['@key']} onClick={() => setSelectedCategory(category['@key'])} category={category}/>
                 )) : null}
             </Center>
         </header>
+        <Text fontSize='4xl' fontWeight="bold" fontFamily='Montserrat' margin='50px 15px'>Produtos</Text>
         <Center>
             <Grid templateColumns="repeat(4, 1fr)" gap={10}>
                 {products.length > 0 ? products.map((product) => (
-                    <Box 
-                        w="400px" 
-                        h="75px" 
-                        bg="#69C7EF" 
-                        borderRadius="5px" 
-                        d="flex" 
-                        alignItems="center" 
-                        justifyContent="space-around"
-                        border="1px solid #000"
-                        boxShadow="2px 2px 10px rgba(0,0,0,.4)"
-                        transition="0.4s all"
-                        _hover={{
-                            boxShadow: "0px 0px 0px"
-                        }}
+                    <ProductCard 
                         key={product['@key']}
-                    > 
-                        <Text fontSize="1.4rem">{product.name}</Text>
-                        <Text fontSize="1.2rem">R$ {product.price}</Text>
-                    </Box>
+                        productName={product.name}
+                        productPrice={product.price}
+                        onClick={() => console.log('clicou')}
+                    />
                 )) : null}
             </Grid>
         </Center>
@@ -176,7 +166,7 @@ function Homepage() {
                     <Text>Se juntou em: {vendorJoined}</Text>
                 </ModalBody>
                 <ModalFooter>
-                    <Button colorScheme="red" onClick={() => deleteVendor()} rightIcon={<MdDelete/>}>
+                    <Button isLoading={isLoading} colorScheme="red" onClick={() => deleteVendor()} rightIcon={<MdDelete/>}>
                         Deletar
                     </Button>
                 </ModalFooter>
