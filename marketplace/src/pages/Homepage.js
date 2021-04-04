@@ -133,6 +133,20 @@ function Homepage() {
         window.location.reload();
     }
 
+    const deleteProduct = async () => {
+        setIsLoading(true);
+        await api.delete('/invoke/deleteAsset', {
+            data: {
+                'key': {
+                    '@assetType': 'product',
+                    'code': selectedProduct.code
+                }
+            }
+        });
+        setIsLoading(false);
+        window.location.reload();
+    }
+
 
   return (
       <>
@@ -149,7 +163,7 @@ function Homepage() {
                         vendorAddress={vendorAddress}
                         vendorCNPJ={vendorCNPJ}
                         vendorJoined={vendorJoined}
-                        isLoadind={isLoading}
+                        isLoading={isLoading}
                         onDelete={() => deleteVendor()}
                     />
                 )) : null}
@@ -179,7 +193,7 @@ function Homepage() {
                         productPrice={product.price}
                         onClick={() => showProductInfo(product.code)}
                         isLoading={isLoading}
-                        onDelete={() => console.log('deletou')}
+                        onDelete={() => deleteProduct()}
                         selectedProduct={selectedProduct}
                         vendors={vendors}
                         categories={categories}
@@ -192,7 +206,7 @@ function Homepage() {
             icon={<TiPlus/>}
             alwaysShowTitle={true}
         >
-            <CreateProduct text="Adicionar produto"/>
+            <CreateProduct text="Adicionar produto" vendors={vendors} categories={categories}/>
             <CreateVendor text="Adicionar vendedor"/>
             <CreateCategory text="Adicionar categoria"/>
         </Fab>    

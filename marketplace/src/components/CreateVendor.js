@@ -21,7 +21,7 @@ function CreateVendor() {
 
   const createVendor = async () => {
     setLoading(true);
-    if(name || address || cnpj) {
+    if(name && address && cnpj) {
         const date = new Date().toISOString();
         await api.post('/invoke/createAsset', {
             'asset': [
