@@ -137,7 +137,7 @@ function ProductCard({productName, productPrice, onClick, selectedProduct, vendo
                         isMulti 
                         closeMenuOnSelect={false} 
                         components={animatedComponents} 
-                        placeholder="Selecione as categorias"
+                        placeholder="Editar as categorias"
                         onChange={(e) => setNewCategories(e)}
                     />
 

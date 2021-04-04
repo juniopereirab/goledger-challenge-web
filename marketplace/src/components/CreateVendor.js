@@ -62,7 +62,7 @@ function CreateVendor() {
                     <FormControl isRequired>
                         <FormLabel fontFamily="Montserrat">Nome:</FormLabel>
                         <Input fontFamily="Montserrat" placeholder="Ex: Princesa Jujuba" value={name} onChange={(e) => setName(e.target.value)}/>
-                        <FormLabel fontFamily="Montserrat" marginTop="20px">Endereco:</FormLabel>
+                        <FormLabel fontFamily="Montserrat" marginTop="20px">Endereço:</FormLabel>
                         <Input fontFamily="Montserrat" placeholder="Ex: Rua Doce, 12" value={address} onChange={(e) => setAddress(e.target.value)} isRequired={true}/>
                         <FormLabel fontFamily="Montserrat" marginTop="20px">CNPJ:</FormLabel>
                         <Input fontFamily="Montserrat" placeholder="Ex: 01.554.552/0001.20" value={cnpj} onChange={(e) => setCNPJ(e.target.value)}/>

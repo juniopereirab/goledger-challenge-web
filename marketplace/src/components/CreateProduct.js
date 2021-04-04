@@ -4,7 +4,7 @@ import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHea
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Button } from '@chakra-ui/button';
 import { MdAddShoppingCart } from 'react-icons/md';
-import {Input, Select as Chelect} from '@chakra-ui/react';
+import {Input, InputGroup, InputLeftElement, Select as Chelect} from '@chakra-ui/react';
 import Select from 'react-select';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
@@ -70,9 +70,17 @@ function CreateProduct({vendors, categories}) {
                 <ModalBody d="flex" flexDirection="column">
                   <FormControl isRequired>
                       <FormLabel fontFamily="Montserrat">Nome:</FormLabel>
-                      <Input fontFamily="Montserrat" placeholder="Ex: Princesa Jujuba" value={name} onChange={(e) => setName(e.target.value)}/>
+                      <Input fontFamily="Montserrat" placeholder="Ex: Docinhos" value={name} onChange={(e) => setName(e.target.value)}/>
                       <FormLabel fontFamily="Montserrat" marginTop="10px">Preco:</FormLabel>
-                      <Input fontFamily="Montserrat" placeholder="Ex: Rua Doce, 12" value={price} onChange={(e) => setPrice(e.target.value)} isRequired={true}/>
+                      <InputGroup>
+                        <InputLeftElement 
+                          pointerEvents="none"
+                          color="gray.300"
+                          fontSize="1.2rem"
+                          children="R$"
+                        />
+                        <Input fontFamily="Montserrat" placeholder="Ex: 150" value={price} onChange={(e) => setPrice(e.target.value)} isRequired={true}/>
+                      </InputGroup>
                       <FormLabel fontFamily="Montserrat" marginTop="10px">Vendedor:</FormLabel>
                       <Chelect placeholder="Selecione um vendedor" color="gray" onChange={(e) => setVendor(e.target.value)} margin="5px 0px">
                           {vendors.map((vendor, index) => (
