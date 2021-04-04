@@ -17,8 +17,6 @@ import ProductCard from '../components/ProductCard';
 function Homepage() {
     
     const [isLoading, setIsLoading] = useState(false);
-    const [vendorVisible, setVendorVisible] = useState(false);
-    const [categoryVisible, setCategoryVisible] = useState(false);
 
     const [vendors, setVendors] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -79,12 +77,10 @@ function Homepage() {
 
         const date = new Date(vendor.dateJoined);
         setVendorJoined(date.toLocaleDateString());
-        setVendorVisible(true);
     }
 
     const showCategoryInfo = (category) => {
         setCategoryName(category.name);
-        setCategoryVisible(true);
     }
 
     const deleteVendor = async () => {
@@ -96,7 +92,20 @@ function Homepage() {
                 cnpj: vendorCNPJ
             }}
         });
-        onClose();
+        setIsLoading(false);
+        window.location.reload();
+    }
+
+    const deleteCategory = async () => {
+        setIsLoading(true);
+        await api.delete('/invoke/deleteAsset', {
+            data: {
+                'key': {
+                    '@assetType': 'category',
+                    name: categoryName
+                }
+            }
+        });
         setIsLoading(false);
         window.location.reload();
     }
@@ -132,7 +141,7 @@ function Homepage() {
                         category={category}
                         categoryName={categoryName}
                         isLoading={isLoading}
-                        onDelete={() => console.log('a')}
+                        onDelete={() => deleteCategory()}
                     />
                 )) : null}
             </Center>
