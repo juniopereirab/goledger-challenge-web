@@ -6,13 +6,15 @@ import { Button } from '@chakra-ui/button';
 import {MdDelete } from 'react-icons/md';
 import {FaPencilAlt} from 'react-icons/fa';
 import { Input } from '@chakra-ui/react';
-import api from '../api';
+import {deleteAsset, updateAsset} from '../services/invoke';
 
-function VendorCard({vendor, onClick, vendorName, vendorAddress, vendorCNPJ, vendorJoined, isLoading, onDelete}) {
+
+function VendorCard({vendor, onClick, vendorName, vendorAddress, vendorCNPJ, vendorJoined}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [newVendorName, setNewVendorName] = useState('');
   const [newVendorAddress, setNewVendorAddress] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
     onClick();
@@ -24,16 +26,45 @@ function VendorCard({vendor, onClick, vendorName, vendorAddress, vendorCNPJ, ven
     const address = newVendorAddress !== '' ? newVendorAddress : null;
     setLoading(true);
 
-    await api.put('/invoke/updateAsset', {
+    const infoToUpdate = {
       'update': {
         '@assetType': 'seller',
         'cnpj': vendorCNPJ,
         'name': name,
         'address': address
       }
-    });
+    }
 
-    window.location.reload();
+    const updated = await updateAsset(infoToUpdate);
+    setLoading(false);
+    if(updated){
+      window.location.reload();
+    }
+    else { 
+      alert("Erro ao atualizar vendedor");
+    }
+
+    
+  }
+
+  const handleDelete = async () => {
+      setIsLoading(true);
+      const infoToDelete = {
+              "key": {
+                  '@assetType': 'seller',
+                  cnpj: vendorCNPJ
+              }
+          }
+
+      const deleted = await deleteAsset(infoToDelete);
+      setIsLoading(false);
+      if(deleted){
+          window.location.reload();
+      }
+      else{
+          alert("Vendedor associado à algum produto, impossível deletar");
+      }
+      
   }
 
   return (
@@ -81,7 +112,7 @@ function VendorCard({vendor, onClick, vendorName, vendorAddress, vendorCNPJ, ven
                 <Button isLoading={loading} colorScheme="blue" onClick={() => handleEdit()} rightIcon={<FaPencilAlt/>}>
                   Editar
                 </Button>
-                <Button isLoading={isLoading} colorScheme="red" onClick={onDelete} rightIcon={<MdDelete/>}>
+                <Button isLoading={isLoading} colorScheme="red" onClick={() => handleDelete()} rightIcon={<MdDelete/>}>
                     Deletar
                 </Button>
             </ModalFooter>

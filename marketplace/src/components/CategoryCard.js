@@ -5,15 +5,37 @@ import { useDisclosure } from '@chakra-ui/hooks';
 import { Text } from '@chakra-ui/layout';
 import { Button } from '@chakra-ui/button';
 import {MdDelete } from 'react-icons/md';
+import {deleteAsset} from '../services/invoke';
 
 
-function CategoryCard({category, onClick, onDelete, isLoading, categoryName}) {
+
+function CategoryCard({category, onClick, categoryName}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleClick = () => {
     onClick();
     onOpen();
   }
+
+  const handleDelete = async () => {
+      setIsLoading(true);
+      const infoToDelete = {
+          'key': {
+              '@assetType': 'category',
+              name: categoryName
+          }
+      }
+      const deleted = await deleteAsset(infoToDelete);
+      setIsLoading(false);
+      if(deleted){      
+          window.location.reload();
+      }
+      else {
+          alert("Erro ao deletar categoria");
+      }
+  }
+
   return (
     <>
       <Center
@@ -44,7 +66,7 @@ function CategoryCard({category, onClick, onDelete, isLoading, categoryName}) {
                 <Text fontSize="2xl" fontWeight="bold" fontFamily="Montserrat">Nome: {categoryName}</Text>
             </ModalBody>
             <ModalFooter>
-                <Button isLoading={isLoading} colorScheme="red" onClick={onDelete} rightIcon={<MdDelete/>}>
+                <Button isLoading={isLoading} colorScheme="red" onClick={() => handleDelete()} rightIcon={<MdDelete/>}>
                     Deletar
                 </Button>
             </ModalFooter>

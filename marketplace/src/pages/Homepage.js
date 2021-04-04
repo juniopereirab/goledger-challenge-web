@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import NavBar from '../components/Navbar';
-import api from '../api';
+import api from '../services/api';
 import { Center, Grid, Text } from '@chakra-ui/layout';
 import { Fab } from 'react-tiny-fab';
 import 'react-tiny-fab/dist/styles.css';
@@ -14,8 +14,10 @@ import CreateProduct from '../components/CreateProduct';
 import CreateVendor from '../components/CreateVendor';
 import CreateCategory from '../components/CreateCategory';
 
+import {getAsset, getProductByCode} from '../services/query';
+
 function Homepage() {
-    const productData = {
+    const mock = {
         name: "",
         price: 0,
         categories: [],
@@ -24,12 +26,6 @@ function Homepage() {
             address: ""
         }
     }
-    
-    const [isLoading, setIsLoading] = useState(false);
-
-    const [vendors, setVendors] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [products, setProducts] = useState([]);
 
     const [settings] = useState({
         dots: true,
@@ -38,6 +34,10 @@ function Homepage() {
         slidesToShow: 4,
         slidesToScroll: 1
     });
+    
+    const [vendors, setVendors] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [products, setProducts] = useState([]);
 
     const [vendorName, setVendorName] = useState("");
     const [vendorAddress, setVendorAddress] = useState("");
@@ -46,38 +46,19 @@ function Homepage() {
 
     const [categoryName, setCategoryName] = useState("");
 
-    const [selectedProduct, setSelectedProduct] = useState(productData);
+    const [selectedProduct, setSelectedProduct] = useState(mock);
 
 
     useEffect(() => {
         async function getHeaderInfo () {
-            const category = await api.post('/query/search', {
-                query: {
-                    selector: {
-                        "@assetType": "category"
-                    }
-                }
-            });
+            const category = await getAsset("category")
+            const vendor = await getAsset("seller")
+            const product = await getAsset("product")
 
-            const vendor = await api.post('/query/search', {
-                query: {
-                    selector: {
-                        "@assetType": "seller"
-                    }
-                }
-            });
-
-            const product = await api.post('/query/search', {
-                query: {
-                    selector: {
-                        "@assetType": "product"
-                    }
-                }
-            });
-
-            setProducts(product['data'].result);
-            setVendors(vendor['data'].result);
-            setCategories(category['data'].result);
+            
+            setProducts(product);
+            setVendors(vendor);
+            setCategories(category);
         }
 
         getHeaderInfo();
@@ -97,55 +78,9 @@ function Homepage() {
     }
 
     const showProductInfo = async (code) => {
-        const response = await api.post('/query/readAsset', {
-            'key': {
-                '@assetType': 'product',
-                'code': code
-            }
-        });
-        setSelectedProduct(response.data);
-    }
-
-    const deleteVendor = async () => {
-        setIsLoading(true);
-        await api.delete('/invoke/deleteAsset', { 
-        data: {
-            "key": {
-                '@assetType': 'seller',
-                cnpj: vendorCNPJ
-            }}
-        });
-        setIsLoading(false);
-        window.location.reload();
-    }
-
-    const deleteCategory = async () => {
-        setIsLoading(true);
-        await api.delete('/invoke/deleteAsset', {
-            data: {
-                'key': {
-                    '@assetType': 'category',
-                    name: categoryName
-                }
-            }
-        });
-        setIsLoading(false);
-        window.location.reload();
-    }
-
-    const deleteProduct = async () => {
-        setIsLoading(true);
-        await api.delete('/invoke/deleteAsset', {
-            data: {
-                'key': {
-                    '@assetType': 'product',
-                    'code': selectedProduct.code
-                }
-            }
-        });
-        setIsLoading(false);
-        window.location.reload();
-    }
+        const product = await getProductByCode(code);
+        setSelectedProduct(product);
+    } 
 
 
   return (
@@ -163,8 +98,6 @@ function Homepage() {
                         vendorAddress={vendorAddress}
                         vendorCNPJ={vendorCNPJ}
                         vendorJoined={vendorJoined}
-                        isLoading={isLoading}
-                        onDelete={() => deleteVendor()}
                     />
                 )) : null}
             </Slider>
@@ -177,8 +110,6 @@ function Homepage() {
                         onClick={() => showCategoryInfo(category)} 
                         category={category}
                         categoryName={categoryName}
-                        isLoading={isLoading}
-                        onDelete={() => deleteCategory()}
                     />
                 )) : null}
             </Center>
@@ -192,8 +123,6 @@ function Homepage() {
                         productName={product.name}
                         productPrice={product.price}
                         onClick={() => showProductInfo(product.code)}
-                        isLoading={isLoading}
-                        onDelete={() => deleteProduct()}
                         selectedProduct={selectedProduct}
                         vendors={vendors}
                         categories={categories}

@@ -7,9 +7,10 @@ import {MdDelete } from 'react-icons/md';
 import Select from 'react-select';
 import {FaPencilAlt} from 'react-icons/fa';
 import makeAnimated from 'react-select/animated';
-import api from '../api';
+import {deleteAsset, updateAsset} from '../services/invoke';
 
-function ProductCard({productName, productPrice, onClick, isLoading, onDelete, selectedProduct, vendors, categories}) {
+
+function ProductCard({productName, productPrice, onClick, selectedProduct, vendors, categories}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const animatedComponents = makeAnimated();
   const categoriesOptions = categories.map((category) => {
@@ -20,6 +21,7 @@ function ProductCard({productName, productPrice, onClick, isLoading, onDelete, s
   const [newSeller, setNewSeller] = useState('')
   const [newCategories, setNewCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const handleClick = async () => {
@@ -37,20 +39,44 @@ function ProductCard({productName, productPrice, onClick, isLoading, onDelete, s
           return { '@assetType': 'category', '@key': category.value }
       }) : null;
 
-      await api.put('/invoke/updateAsset', {
-          "update": {
-              "@assetType": "product",
-              "code": selectedProduct.code,
-              name,
-              price,
-              categories: newerCategory,
-              soldBy: seller
-          }
-      });
+      const infoToUpdate = {
+        "update": {
+            "@assetType": "product",
+            "code": selectedProduct.code,
+            name,
+            price,
+            categories: newerCategory,
+            soldBy: seller
+        }
+      }
 
+      const updated = await updateAsset(infoToUpdate);
       setLoading(false);
-      window.location.reload();
+      if(updated){
+        window.location.reload();
+      }
+      else { 
+        alert("Erro ao atualizar produto");
+      }
   }
+
+  const handleDelete = async () => {
+        setIsLoading(true);
+        const infoToDelete = {
+            'key': {
+                '@assetType': 'product',
+                'code': selectedProduct.code
+            }
+        }
+        const deleted = await deleteAsset(infoToDelete);
+        setIsLoading(false);
+        if(deleted) {
+            window.location.reload();
+        }
+        else {
+            alert("Erro ao deletar produto");
+        }
+    }
   return (
     <>
         <Box 
@@ -120,7 +146,7 @@ function ProductCard({productName, productPrice, onClick, isLoading, onDelete, s
                     <Button isLoading={loading} colorScheme="blue" onClick={() => handleEdit()} rightIcon={<FaPencilAlt/>}>
                     Editar
                     </Button>
-                    <Button isLoading={isLoading} colorScheme="red" onClick={onDelete} rightIcon={<MdDelete/>}>
+                    <Button isLoading={isLoading} colorScheme="red" onClick={() => handleDelete()} rightIcon={<MdDelete/>}>
                         Deletar
                     </Button>
                 </ModalFooter>

@@ -8,7 +8,7 @@ import { BsPersonPlusFill } from 'react-icons/bs';
 import { Input } from '@chakra-ui/input';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
-import api from '../api';
+import { createAsset } from '../services/invoke';
 
 
 function CreateVendor() {
@@ -23,7 +23,7 @@ function CreateVendor() {
     setLoading(true);
     if(name && address && cnpj) {
         const date = new Date().toISOString();
-        await api.post('/invoke/createAsset', {
+        const infoToCreate = {
             'asset': [
                 {
                     '@assetType': 'seller',
@@ -33,10 +33,16 @@ function CreateVendor() {
                     dateJoined: date
                 }
             ]
-        });
+        }
+        const created = await createAsset(infoToCreate);
+        setLoading(false);
+        if(created){
+            window.location.reload();
+        }
+        else {
+            alert("Erro ao criar vendedor");
+        }
     }
-    setLoading(false);
-    window.location.reload();
   }
 
   return (

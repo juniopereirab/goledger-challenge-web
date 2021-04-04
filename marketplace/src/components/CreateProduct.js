@@ -9,7 +9,7 @@ import Select from 'react-select';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
 import makeAnimated from 'react-select/animated';
-import api from '../api';
+import { createAsset } from '../services/invoke';
 
 function CreateProduct({vendors, categories}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -31,8 +31,7 @@ function CreateProduct({vendors, categories}) {
       const newerCategory = category.map((category) => {
           return { '@assetType': 'category', '@key': category.value }
       });
-
-      await api.post('/invoke/createAsset', {
+      const infoToCreate = {
         'asset': [
           {
             "@assetType": "product",
@@ -43,10 +42,16 @@ function CreateProduct({vendors, categories}) {
             categories: newerCategory
           }
         ]
-      });
+      }
+      const created = await createAsset(infoToCreate);
+      setLoading(false);
+      if(created){
+        window.location.reload();
+      }
+      else {
+        alert("Erro ao criar produto");
+      }
     }
-    setLoading(false);
-    window.location.reload();
   }
 
   return (

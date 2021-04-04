@@ -7,7 +7,7 @@ import { Button } from '@chakra-ui/button';
 import { FaFilter } from 'react-icons/fa';
 import { Input } from '@chakra-ui/input';
 import { AiOutlinePlusCircle } from 'react-icons/ai';
-import api from '../api';
+import { createAsset } from '../services/invoke';
 
 
 function CreateCategory() {
@@ -17,15 +17,22 @@ function CreateCategory() {
 
   const createCategory = async () => {
       setLoading(true);
-      await api.post('/invoke/createAsset', {
-          "asset": [
-              {
-                  "@assetType": 'category',
-                  name
-              }
-          ]
-      });
-      window.location.reload();
+      const infoToCreate = {
+        "asset": [
+            {
+                "@assetType": 'category',
+                name
+            }
+        ]
+      }
+      const created = await createAsset(infoToCreate);
+      setLoading(false);
+      if(created){
+          window.location.reload();
+      }
+      else{
+          alert("Erro ao criar categoria");
+      }
   }
 
   return (
