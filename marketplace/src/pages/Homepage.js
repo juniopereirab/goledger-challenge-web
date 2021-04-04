@@ -15,12 +15,22 @@ import ProductCard from '../components/ProductCard';
 
 
 function Homepage() {
+    const productData = {
+        name: "",
+        price: 0,
+        categories: [],
+        soldBy: {
+            name: "",
+            address: ""
+        }
+    }
     
     const [isLoading, setIsLoading] = useState(false);
 
     const [vendors, setVendors] = useState([]);
     const [categories, setCategories] = useState([]);
     const [products, setProducts] = useState([]);
+
     const [settings] = useState({
         dots: true,
         infinite: false,
@@ -35,6 +45,9 @@ function Homepage() {
     const [vendorJoined, setVendorJoined] = useState("");
 
     const [categoryName, setCategoryName] = useState("");
+
+    const [selectedProduct, setSelectedProduct] = useState(productData);
+
 
     useEffect(() => {
         async function getHeaderInfo () {
@@ -81,6 +94,17 @@ function Homepage() {
 
     const showCategoryInfo = (category) => {
         setCategoryName(category.name);
+    }
+
+    const showProductInfo = async (code) => {
+        const response = await api.post('/query/readAsset', {
+            'key': {
+                '@assetType': 'product',
+                'code': code
+            }
+        });
+        console.log(response.data);
+        setSelectedProduct(response.data);
     }
 
     const deleteVendor = async () => {
@@ -154,7 +178,10 @@ function Homepage() {
                         key={product['@key']}
                         productName={product.name}
                         productPrice={product.price}
-                        onClick={() => console.log('clicou')}
+                        onClick={() => showProductInfo(product.code)}
+                        isLoading={isLoading}
+                        onDelete={() => console.log('deletou')}
+                        selectedProduct={selectedProduct}
                     />
                 )) : null}
             </Grid>

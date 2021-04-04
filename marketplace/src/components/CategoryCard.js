@@ -1,13 +1,15 @@
+import React, {useState} from 'react';
 import { Center } from '@chakra-ui/layout';
-import React from 'react';
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/modal';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Text } from '@chakra-ui/layout';
 import { Button } from '@chakra-ui/button';
 import {MdDelete } from 'react-icons/md';
 
+
 function CategoryCard({category, onClick, onDelete, isLoading, categoryName}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
   const handleClick = () => {
     onClick();
     onOpen();
@@ -39,7 +41,7 @@ function CategoryCard({category, onClick, onDelete, isLoading, categoryName}) {
             <ModalHeader>Informações do Categoria</ModalHeader>
             <ModalCloseButton />
             <ModalBody d="flex" flexDirection="column">
-                <Text fontSize="3xl">Nome: {categoryName}</Text>
+                <Text fontSize="2xl">Nome: {categoryName}</Text>
             </ModalBody>
             <ModalFooter>
                 <Button isLoading={isLoading} colorScheme="red" onClick={onDelete} rightIcon={<MdDelete/>}>
